@@ -54,19 +54,11 @@ def check_endpoint(endpoint):
             if response.status_code != endpoint["expected_status"]:
                 send_alert(f"{endpoint['name']}: Non-{endpoint['expected_status']} status code: {response.status_code}")
 
-            # Optionally parse response body for health indicators
+            # Check plain text response
             if response.status_code == endpoint["expected_status"]:
-                if not response.text.strip():  # Check if the response body is empty
-                    logging.error(f"{endpoint['name']}: Empty response body")
-                    send_alert(f"{endpoint['name']}: Empty response body")
-                else:
-                    try:
-                        health_data = response.json()  # Attempt to parse JSON
-                        if health_data.get(endpoint["health_indicator"]) != "ok":
-                            send_alert(f"{endpoint['name']}: {endpoint['health_indicator']} issue: {health_data.get(endpoint['health_indicator'])}")
-                    except json.JSONDecodeError:
-                        logging.error(f"{endpoint['name']}: Invalid JSON response")
-                        send_alert(f"{endpoint['name']}: Invalid JSON response")
+                response_text = response.text.strip()  # Get the plain text response
+                if response_text != endpoint.get("expected_response", "UP"):
+                    send_alert(f"{endpoint['name']}: Unexpected response: {response_text}")
 
             break  # Exit retry loop if successful
 
@@ -75,7 +67,7 @@ def check_endpoint(endpoint):
             if attempt == RETRY_ATTEMPTS - 1:
                 send_alert(f"{endpoint['name']}: Health check failed after {RETRY_ATTEMPTS} attempts: {e}")
             time.sleep(5)  # Wait before retrying
-
+            
 def main():
     """
     Runs the health check system for all endpoints at a configured interval.
