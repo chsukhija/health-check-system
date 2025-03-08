@@ -5,6 +5,8 @@ import json
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 from config import load_endpoints, CHECK_INTERVAL, RETRY_ATTEMPTS, SLACK_TOKEN, SLACK_CHANNEL
+import os
+from pathlib import Path  # Import Path from pathlib
 
 # Create the logs directory if it doesn't exist
 logs_dir = Path("logs")
