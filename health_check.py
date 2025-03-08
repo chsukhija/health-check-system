@@ -6,15 +6,20 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 from config import load_endpoints, CHECK_INTERVAL, RETRY_ATTEMPTS, SLACK_TOKEN, SLACK_CHANNEL
 
+# Create the logs directory if it doesn't exist
+logs_dir = Path("logs")
+logs_dir.mkdir(exist_ok=True)
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler("logs/health_check.log"),
+        logging.FileHandler(logs_dir / "health_check.log"),  # Use the logs directory
         logging.StreamHandler()
     ]
 )
+
 
 # Initialize Slack client
 slack_client = WebClient(token=SLACK_TOKEN)
