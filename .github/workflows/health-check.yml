@@ -18,9 +18,7 @@ jobs:
       - name: Run health check
         env:
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
-          HEALTH_ENDPOINT: ${{ secrets.HEALTH_ENDPOINT }}
           CHECK_INTERVAL: ${{ secrets.CHECK_INTERVAL }}
-          RESPONSE_TIME_THRESHOLD: ${{ secrets.RESPONSE_TIME_THRESHOLD }}
           RETRY_ATTEMPTS: ${{ secrets.RETRY_ATTEMPTS }}
           SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
         run: python health_check.py
