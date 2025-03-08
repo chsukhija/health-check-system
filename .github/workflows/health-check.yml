@@ -15,6 +15,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Create the logs directory
+      - name: Create logs directory
+        run: mkdir -p logs
+
       # Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -30,7 +34,7 @@ jobs:
       # Run the health check script
       - name: Run health check
         env:
-          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}  # Use the Slack token from GitHub secrets
+          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
           HEALTH_ENDPOINT: ${{ secrets.HEALTH_ENDPOINT }}
           CHECK_INTERVAL: ${{ secrets.CHECK_INTERVAL }}
           RESPONSE_TIME_THRESHOLD: ${{ secrets.RESPONSE_TIME_THRESHOLD }}
