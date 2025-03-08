@@ -1,6 +1,6 @@
 [
   {
-    "name": "Weaviate Health",
+    "name": "Health Service",
     "url": "https://accounts.datastax.com/session-service/v1/login",
     "expected_status": 200,
     "response_time_threshold": 3.0,
