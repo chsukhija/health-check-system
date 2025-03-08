@@ -54,8 +54,8 @@ docker logs <container_id>
 Example logs:
 
 Copy
-2025-03-08 07:27:13,422 - INFO - Health check for Weaviate Health (https://weaviate.io/health) - Status: 200, Response Time: 0.41s
-2025-03-08 07:27:13,423 - INFO - Health check for API Service (https://api.example.com/status) - Status: 200, Response Time: 0.32s
+2025-03-08 07:27:13,422 - INFO - Health check for Weaviate Health https://www.datastax.com - Status: 200, Response Time: 0.41s
+2025-03-08 07:27:13,423 - INFO - Health check for API Service https://status.astra.datastax.com/ - Status: 200, Response Time: 0.32s
 ```
 
 **Stop and Remove the Container**
