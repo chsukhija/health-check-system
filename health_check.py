@@ -26,12 +26,25 @@ def send_alert(message):
     try:
         slack_client.chat_postMessage(
             channel=SLACK_CHANNEL,
-            text=f"🚨 Health Check Alert: {message}"
+            text=f":red_alert: Health Check Alert: {message}"
         )
         logging.error(f"Alert sent to Slack: {message}")
     except SlackApiError as e:
         logging.error(f"Failed to send Slack alert: {e.response['error']}")
 
+def send_alert_pass(message):
+    """
+    Sends an alert to a Slack channel.
+    """
+    try:
+        slack_client.chat_postMessage(
+            channel=SLACK_CHANNEL,
+            text=f":green-alert: Health Check Passed: {message}"
+        )
+        logging.error(f"Alert sent to Slack: {message}")
+    except SlackApiError as e:
+        logging.error(f"Failed to send Slack alert: {e.response['error']}")
+        
 def check_endpoint(endpoint):
     """
     Performs a health check for a single endpoint.
@@ -59,7 +72,9 @@ def check_endpoint(endpoint):
                 response_text = response.text.strip()  # Get the plain text response
                 if response_text != endpoint.get("expected_response", "UP"):
                     send_alert(f"{endpoint['name']}: Unexpected response: {response_text}")
-
+                else
+                    send_alert_pass(f"{endpoint['name']}: Passed: {response_text}")
+            
             break  # Exit retry loop if successful
 
         except requests.exceptions.RequestException as e:
