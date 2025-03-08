@@ -1,10 +1,14 @@
 import os
+import json
 
-# Health check configuration
-HEALTH_ENDPOINT = os.getenv("HEALTH_ENDPOINT", "http://weaviate.io")
-CHECK_INTERVAL = int(os.getenv("CHECK_INTERVAL", "300").strip('"'))  # Strip quotes and convert to int
-RESPONSE_TIME_THRESHOLD = float(os.getenv("RESPONSE_TIME_THRESHOLD", "3.0").strip('"'))  # Strip quotes and convert to float
-RETRY_ATTEMPTS = int(os.getenv("RETRY_ATTEMPTS", "3").strip('"'))  # Strip quotes and convert to int
+# Load endpoints from JSON file
+def load_endpoints():
+    with open("endpoints.json", "r") as file:
+        return json.load(file)
+
+# General configuration
+CHECK_INTERVAL = int(os.getenv("CHECK_INTERVAL", "300").strip('"'))  # Default: 5 minutes
+RETRY_ATTEMPTS = int(os.getenv("RETRY_ATTEMPTS", "3").strip('"'))  # Retry mechanism for transient failures
 
 # Slack configuration
 SLACK_TOKEN = os.getenv("SLACK_TOKEN", "").strip('"')  # Strip quotes
