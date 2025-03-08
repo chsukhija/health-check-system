@@ -1,14 +1,14 @@
 [
   {
     "name": "Weaviate Health",
-    "url": "https://weaviate.io/health",
+    "url": "https://accounts.datastax.com/session-service/v1/login",
     "expected_status": 200,
     "response_time_threshold": 3.0,
     "health_indicator": "database_status"
   },
   {
     "name": "API Service",
-    "url": "https://api.example.com/status",
+    "url": "https://accounts.datastax.com/session-service/v1/login",
     "expected_status": 200,
     "response_time_threshold": 2.0,
     "health_indicator": "service_status"
