@@ -1,7 +1,7 @@
 import os
 
 # Health check configuration
-HEALTH_ENDPOINT = os.getenv("HEALTH_ENDPOINT", "http://example.com/health")
+HEALTH_ENDPOINT = os.getenv("HEALTH_ENDPOINT", "http://weaviate.io")
 CHECK_INTERVAL = int(os.getenv("CHECK_INTERVAL", "300").strip('"'))  # Strip quotes and convert to int
 RESPONSE_TIME_THRESHOLD = float(os.getenv("RESPONSE_TIME_THRESHOLD", "3.0").strip('"'))  # Strip quotes and convert to float
 RETRY_ATTEMPTS = int(os.getenv("RETRY_ATTEMPTS", "3").strip('"'))  # Strip quotes and convert to int
