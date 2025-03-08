@@ -1,7 +1,9 @@
 import requests
 import time
 import logging
-from config import HEALTH_ENDPOINT, CHECK_INTERVAL, RESPONSE_TIME_THRESHOLD, RETRY_ATTEMPTS
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
+from config import HEALTH_ENDPOINT, CHECK_INTERVAL, RESPONSE_TIME_THRESHOLD, RETRY_ATTEMPTS, SLACK_TOKEN, SLACK_CHANNEL
 
 # Configure logging
 logging.basicConfig(
@@ -13,13 +15,22 @@ logging.basicConfig(
     ]
 )
 
-# Mock alerting function
+# Initialize Slack client
+slack_client = WebClient(token=SLACK_TOKEN)
+
 def send_alert(message):
     """
-    Simulates sending an alert (e.g., email, Slack).
+    Sends an alert to a Slack channel.
     """
-    logging.error(f"ALERT: {message}")
-    # In a real-world scenario, integrate with an alerting service like Twilio, Slack, or PagerDuty.
+    try:
+        # Send a message to Slack
+        slack_client.chat_postMessage(
+            channel=SLACK_CHANNEL,
+            text=f"🚨 Health Check Alert: {message}"
+        )
+        logging.error(f"Alert sent to Slack: {message}")
+    except SlackApiError as e:
+        logging.error(f"Failed to send Slack alert: {e.response['error']}")
 
 def check_health():
     """
@@ -37,6 +48,7 @@ def check_health():
             # Check response time
             if response_time > RESPONSE_TIME_THRESHOLD:
                 logging.warning(f"Response time exceeded threshold: {response_time:.2f}s > {RESPONSE_TIME_THRESHOLD}s")
+                send_alert(f"Response time exceeded threshold: {response_time:.2f}s > {RESPONSE_TIME_THRESHOLD}s")
 
             # Check HTTP status code
             if response.status_code != 200:
