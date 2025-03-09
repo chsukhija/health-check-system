@@ -105,10 +105,12 @@ module "weaviate_helm" {
   weaviate_replication_factor = 1
 
   # Node Affinity and Anti-Affinity (to spread pods across AZs)
-  affinity = {
-    podAntiAffinity = {
-      requiredDuringSchedulingIgnoredDuringExecution = [
-        {
+affinity = {
+  podAntiAffinity = {
+    preferredDuringSchedulingIgnoredDuringExecution = [
+      {
+        weight = 100 # Weight for this preference (1-100)
+        podAffinityTerm = {
           labelSelector = {
             matchExpressions = [
               {
@@ -117,12 +119,14 @@ module "weaviate_helm" {
                 values   = ["weaviate"]
               },
             ]
+            namespaces = ["weaviate"] # Uncomment and set if needed
           }
-          topologyKey = "topology.kubernetes.io/zone"
-        },
-      ]
-    }
+          topologyKey = "topology.kubernetes.io/zone" # Ensure this key exists on nodes
+        }
+      },
+    ]
   }
+}
 
   # Tolerations (if needed based on your taints setup)
   tolerations = [
