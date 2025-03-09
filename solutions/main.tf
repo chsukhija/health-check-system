@@ -230,6 +230,23 @@ output "cluster_certificate_authority_data" {
 module "weaviate_helm" {
  source                        = "./modules/weaviate"
   # ... (existing configuration)
+ 
+  # Basic Configuration
+  name                = "weaviate"
+  namespace           = var.namespace
+  chart_version       = "v1.2.0"
+
+  # Resource Configuration
+  resources = {
+    requests = {
+      cpu    = "1000m"
+      memory = "2Gi"
+    }
+    limits = {
+      cpu    = "2000m"
+      memory = "4Gi"
+    }
+  }
 
 
  # HA Setup
@@ -285,6 +302,7 @@ module "weaviate_helm" {
  volume_claim_templates = [{
    metadata = {
      name = "weaviate-data"
+     namespace = var.namespace
    }
    spec = {
      accessModes = ["ReadWriteOnce"]
