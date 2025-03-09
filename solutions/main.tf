@@ -127,6 +127,20 @@ module "weaviate_helm" {
   # Tolerations (if needed based on your taints setup)
   tolerations = [
     # Tolerations configuration here
+          {
+            key      = "example-key"
+            operator = "Equal"
+            value    = "example-value"
+            effect   = "NoSchedule"
+          },
+
+          # Example: Tolerate any taint with key "another-key" and effect "NoExecute" for 1 hour
+          {
+            key                = "another-key"
+            operator           = "Exists"
+            effect             = "NoExecute"
+            toleration_seconds = 3600
+          }
   ]
 
   # Persistent Volume Claim Issue
