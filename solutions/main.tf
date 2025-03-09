@@ -343,8 +343,8 @@ module "cluster_autoscaler" {
   cluster_name                     = var.eks_cluster_name
   service_account_name            = "cluster-autoscaler"
   namespace                       = "kube-system"
-  cluster_autoscaler_version      = "v1.23.0"
-  cluster_autoscaler_image_tag    = "v1.23.0"
+  cluster_autoscaler_version      = "v1.28.5"
+  cluster_autoscaler_image_tag    = "v1.28.5"
 }
 
 
