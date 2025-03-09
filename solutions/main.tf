@@ -147,9 +147,11 @@ module "weaviate_helm" {
   volume_claim_templates = [{
     metadata = {
       name = "weaviate-data"
+      namespace = "weaviate-namespace" # Uncomment and set if needed
     }
     spec = {
       accessModes = ["ReadWriteOnce"]
+      storageClassName = "standard" # Replace with your desired StorageClass
       resources = {
         requests = {
           storage = "10Gi"
