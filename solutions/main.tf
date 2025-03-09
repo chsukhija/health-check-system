@@ -1,3 +1,21 @@
+terraform {
+  required_version = ">= 1.0.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"  # More specific version constraint
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.0"
+    }
+  }
+}
+
 ################################################################################
 # Providers
 ################################################################################
@@ -46,6 +64,23 @@ locals {
   )
   customer_identifier         = trimprefix(var.eks_cluster_name, "wv-")
   customer_cluster_identifier = "prod-dedicated-enterprise"
+  weaviate_config = {
+    replica_count = 2
+    resources     = var.weaviate_resources
+    storage       = var.weaviate_storage
+    monitoring    = local.monitoring_thresholds
+    env_vars      = {
+      ENABLE_MODULES                           = "backup-filesystem,text2vec-transformers"
+      QUERY_DEFAULTS_LIMIT                     = "25"
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED   = "false"
+      PERSISTENCE_DATA_PATH                    = "/var/lib/weaviate"
+      LIMIT_RESOURCES                          = "true"
+    }
+  }
+  monitoring_thresholds = {
+    memory_threshold = "80"
+    cpu_threshold    = "75"
+  }
 }
 
 ################################################################################
@@ -97,113 +132,9 @@ resource "kubernetes_namespace" "weaviate-namespace" {
 
 module "weaviate_helm" {
   source = "./modules/weaviate"
-
-  # HA Setup
-  replica_count = 2
-
-  # Resource Limits and Requests
-  resources = {
-    limits = {
-      cpu    = "4000m"     # 4 CPU cores
-      memory = "16Gi"      # 16GB memory
-    }
-    requests = {
-      cpu    = "2000m"     # 2 CPU cores
-      memory = "8Gi"       # 8GB memory
-    }
-  }
-
-  # Weaviate-specific configurations
-  weaviate_replication_factor = 1
-
-  # Node Affinity and Anti-Affinity (to spread pods across AZs)
-  affinity = {
-    nodeAffinity = {
-      requiredDuringSchedulingIgnoredDuringExecution = {
-        nodeSelectorTerms = [{
-          matchExpressions = [{
-            key      = "worker-group"
-            operator = "In"
-            values   = ["weaviate-workload"]
-          }]
-        }]
-      }
-    }
-    podAntiAffinity = {
-      preferredDuringSchedulingIgnoredDuringExecution = [
-        {
-          weight = 100
-          podAffinityTerm = {
-            labelSelector = {
-              matchExpressions = [
-                {
-                  key      = "app"
-                  operator = "In"
-                  values   = ["weaviate"]
-                }
-              ]
-            }
-            topologyKey = "topology.kubernetes.io/zone"
-          }
-        }
-      ]
-    }
-  }
-
-  # Tolerations for dedicated nodes
-  tolerations = [
-    {
-      key      = "workload-type"
-      operator = "Equal"
-      value    = "weaviate"
-      effect   = "NoSchedule"
-    }
-  ]
-
-  # Persistent Volume Configuration
-  volume_claim_templates = [{
-    metadata = {
-      name      = "weaviate-data"
-      namespace = var.namespace
-    }
-    spec = {
-      accessModes      = ["ReadWriteOnce"]
-      storageClassName = "gp3"  # Using GP3 for better performance
-      resources = {
-        requests = {
-          storage = "100Gi"  # Adjust based on your data size requirements
-        }
-      }
-    }
-  }]
-
-  # Resource QoS class: Guaranteed (requests = limits)
-  guaranteed_qos = true
-
-  # Additional configurations
-  env = [
-    {
-      name  = "ENABLE_MODULES"
-      value = "backup-filesystem,text2vec-transformers"
-    },
-    {
-      name  = "QUERY_DEFAULTS_LIMIT"
-      value = "25"
-    },
-    {
-      name  = "AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED"
-      value = "false"
-    },
-    {
-      name  = "PERSISTENCE_DATA_PATH"
-      value = "/var/lib/weaviate"
-    },
-    {
-      name  = "LIMIT_RESOURCES"
-      value = "true"
-    }
-  ]
-
+  
+  config = local.weaviate_config
+  
   depends_on = [
     kubernetes_namespace.weaviate-namespace
   ]
@@ -249,113 +180,9 @@ variable "namespace" {
 
 module "weaviate_helm" {
   source = "./modules/weaviate"
-
-  # HA Setup
-  replica_count = 2
-
-  # Resource Limits and Requests
-  resources = {
-    limits = {
-      cpu    = "4000m"     # 4 CPU cores
-      memory = "16Gi"      # 16GB memory
-    }
-    requests = {
-      cpu    = "2000m"     # 2 CPU cores
-      memory = "8Gi"       # 8GB memory
-    }
-  }
-
-  # Weaviate-specific configurations
-  weaviate_replication_factor = 1
-
-  # Node Affinity and Anti-Affinity (to spread pods across AZs)
-  affinity = {
-    nodeAffinity = {
-      requiredDuringSchedulingIgnoredDuringExecution = {
-        nodeSelectorTerms = [{
-          matchExpressions = [{
-            key      = "worker-group"
-            operator = "In"
-            values   = ["weaviate-workload"]
-          }]
-        }]
-      }
-    }
-    podAntiAffinity = {
-      preferredDuringSchedulingIgnoredDuringExecution = [
-        {
-          weight = 100
-          podAffinityTerm = {
-            labelSelector = {
-              matchExpressions = [
-                {
-                  key      = "app"
-                  operator = "In"
-                  values   = ["weaviate"]
-                }
-              ]
-            }
-            topologyKey = "topology.kubernetes.io/zone"
-          }
-        }
-      ]
-    }
-  }
-
-  # Tolerations for dedicated nodes
-  tolerations = [
-    {
-      key      = "workload-type"
-      operator = "Equal"
-      value    = "weaviate"
-      effect   = "NoSchedule"
-    }
-  ]
-
-  # Persistent Volume Configuration
-  volume_claim_templates = [{
-    metadata = {
-      name      = "weaviate-data"
-      namespace = var.namespace
-    }
-    spec = {
-      accessModes      = ["ReadWriteOnce"]
-      storageClassName = "gp3"  # Using GP3 for better performance
-      resources = {
-        requests = {
-          storage = "100Gi"  # Adjust based on your data size requirements
-        }
-      }
-    }
-  }]
-
-  # Resource QoS class: Guaranteed (requests = limits)
-  guaranteed_qos = true
-
-  # Additional configurations
-  env = [
-    {
-      name  = "ENABLE_MODULES"
-      value = "backup-filesystem,text2vec-transformers"
-    },
-    {
-      name  = "QUERY_DEFAULTS_LIMIT"
-      value = "25"
-    },
-    {
-      name  = "AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED"
-      value = "false"
-    },
-    {
-      name  = "PERSISTENCE_DATA_PATH"
-      value = "/var/lib/weaviate"
-    },
-    {
-      name  = "LIMIT_RESOURCES"
-      value = "true"
-    }
-  ]
-
+  
+  config = local.weaviate_config
+  
   depends_on = [
     kubernetes_namespace.weaviate-namespace
   ]
