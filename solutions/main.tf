@@ -288,6 +288,7 @@ module "weaviate_helm" {
    }
    spec = {
      accessModes = ["ReadWriteOnce"]
+    storageClassName = "gp3"
      resources = {
        requests = {
          storage = "10Gi"
