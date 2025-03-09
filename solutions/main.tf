@@ -311,6 +311,42 @@ module "weaviate_helm" {
 
 # What additional modules should be added here?
 
+# EKS Add-ons
+module "eks_addons" {
+  source = "../modules/eks-addons"
+
+  cluster_name = var.eks_cluster_name
+  
+  addons = [
+    {
+      addon_name        = "coredns"
+      addon_version     = "v1.10.1-eksbuild.13"
+      resolve_conflicts = "OVERWRITE"
+    },
+    {
+      addon_name        = "vpc-cni"
+      addon_version     = "v1.18.3-eksbuild.3"
+      resolve_conflicts = "OVERWRITE"
+    },
+    {
+      addon_name        = "kube-proxy"
+      addon_version     = "v1.28.12-eksbuild.5"
+      resolve_conflicts = "OVERWRITE"
+    }
+  ]
+}
+
+# Cluster Autoscaler
+module "cluster_autoscaler" {
+  source = "../modules/cluster-autoscaler"
+
+  cluster_name                     = var.eks_cluster_name
+  service_account_name            = "cluster-autoscaler"
+  namespace                       = "kube-system"
+  cluster_autoscaler_version      = "v1.23.0"
+  cluster_autoscaler_image_tag    = "v1.23.0"
+}
+
 
 ################################################################################
 # Kubernetes Namespace for Weaviate
