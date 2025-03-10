@@ -7,7 +7,8 @@ This system monitors the health of a web application by performing periodic chec
 
 **Sample URL** "url": "https://ib1vjdrqg2qkgnjsi5g.c0.europe-west3.gcp.weaviate.cloud/v1/.well-known/live", "expected_status": 200
 
-<img width="1189" alt="image" src="https://github.com/user-attachments/assets/ce8fe991-188b-46dc-9f87-6bc285b7878c" />
+<img width="1311" alt="image" src="https://github.com/user-attachments/assets/e66ceeda-b8a5-46dc-8c36-a5d5cc972bae" />
+
 
 
 ## Setup
@@ -61,9 +62,15 @@ Check the logs to ensure the container is running correctly:
 docker logs <container_id>
 Example logs:
 
-Copy
-2025-03-08 07:27:13,422 - INFO - Health check for Astra Health https://www.datastax.com - Status: 200, Response Time: 0.41s
-2025-03-08 07:27:13,423 - INFO - Health check for API Service https://status.astra.datastax.com/ - Status: 200, Response Time: 0.32s
+2025-03-10 06:40:19,688 - INFO - Starting health check system...
+
+2025-03-10 06:40:20,563 - INFO - Health check for DataStax Astra Health (https://95f92980-d23d-45c6-9185-3e036d3058f0-europe-west4.apps.astra.datastax.com/api/rest/health) - Status: 200, Response Time: 0.87s
+
+2025-03-10 06:40:21,056 - ERROR - Alert sent to Slack: https://95f92980-d23d-45c6-9185-3e036d3058f0-europe-west4.apps.astra.datastax.com/api/rest/health: Passed: UP
+
+2025-03-10 06:40:21,622 - INFO - Health check for API Service (https://ib1vjdrqg2qkgnjsi5g.c0.europe-west3.gcp.weaviate.cloud/v1/.well-known/live) - Status: 200, Response Time: 0.56s
+
+2025-03-10 06:40:22,064 - ERROR - Alert sent to Slack: https://ib1vjdrqg2qkgnjsi5g.c0.europe-west3.gcp.weaviate.cloud/v1/.well-known/live: Passed: 
 ```
 
 5. **Stop and Remove the Container**
