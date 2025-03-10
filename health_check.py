@@ -85,9 +85,9 @@ def check_endpoint(endpoint):
             break  # Exit retry loop if successful
 
         except requests.exceptions.RequestException as e:
-            logging.error(f"{endpoint['name']}: Attempt {attempt + 1} failed: {e}")
+            logging.error(f"{endpoint['url']}: Attempt {attempt + 1} failed: {e}")
             if attempt == RETRY_ATTEMPTS - 1:
-                send_alert(f"{endpoint['name']}: Health check failed after {RETRY_ATTEMPTS} attempts: {e}")
+                send_alert(f"{endpoint['url']}: Health check failed after {RETRY_ATTEMPTS} attempts: {e}")
             time.sleep(5)  # Wait before retrying
             
 def main():
