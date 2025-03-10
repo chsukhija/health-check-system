@@ -27,7 +27,9 @@ Run the following command to build the Docker image:
 docker build -t health-check-system .
 ```
 
-3a. **Run the Docker Container**
+3. **Run the Docker Container**
+
+3a. **Using Environment Variables**
 Use the following command to run the container. Pass environment variables for configuration:
 
 ```bash
@@ -39,7 +41,7 @@ docker run -d \
   health-check-system
 ```
 
-3b. **Using Environment Variables**
+3b. **Using Environment Variables in .env file**
 If you prefer to use an .env file for environment variables, create a .env file:
 
 ```bash
