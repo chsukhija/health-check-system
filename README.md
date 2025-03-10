@@ -75,7 +75,15 @@ Example logs:
 2025-03-10 06:40:22,064 - ERROR - Alert sent to Slack: https://ib1vjdrqg2qkgnjsi5g.c0.europe-west3.gcp.weaviate.cloud/v1/.well-known/live: Passed: 
 ```
 
-5. **Stop and Remove the Container**
+5. **Push the Docker Image to a Registry:**
+Push the image to a container registry like Docker Hub, Google Container Registry (GCR), or Amazon ECR. For Docker Hub:
+
+```bash
+docker tag health-check-system:latest <your-dockerhub-username>/health-check-system:latest
+docker push <your-dockerhub-username>/health-check-system:latest
+```
+
+6. **Stop and Remove the Container**
 To stop and remove the container:
 
 ```bash
