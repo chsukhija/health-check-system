@@ -4,6 +4,9 @@ This system monitors the health of a web application by performing periodic chec
 
 
 ## Sample Slack Alert 
+
+**Sample URL** "url": "https://ib1vjdrqg2qkgnjsi5g.c0.europe-west3.gcp.weaviate.cloud/v1/.well-known/live", "expected_status": 200
+
 <img width="1189" alt="image" src="https://github.com/user-attachments/assets/ce8fe991-188b-46dc-9f87-6bc285b7878c" />
 
 
@@ -15,7 +18,7 @@ This system monitors the health of a web application by performing periodic chec
    cd health-check-system
    ```
    
-**Build the Docker Image**
+2. **Build the Docker Image**
 
 Run the following command to build the Docker image:
 
@@ -23,7 +26,7 @@ Run the following command to build the Docker image:
 docker build -t health-check-system .
 ```
 
-**Run the Docker Container**
+3. **Run the Docker Container**
 Use the following command to run the container. Pass environment variables for configuration:
 
 ```bash
@@ -35,7 +38,7 @@ docker run -d \
   health-check-system
 ```
 
-**Using Environment Variables**
+3a. **Using Environment Variables**
 If you prefer to use an .env file for environment variables, create a .env file:
 
 ```bash
@@ -51,7 +54,7 @@ Then, run the container with the .env file:
 docker run -d --env-file .env health-check-system
 ```
 
-**Verify the Container**
+4. **Verify the Container**
 Check the logs to ensure the container is running correctly:
 
 ```bash
@@ -63,7 +66,7 @@ Copy
 2025-03-08 07:27:13,423 - INFO - Health check for API Service https://status.astra.datastax.com/ - Status: 200, Response Time: 0.32s
 ```
 
-**Stop and Remove the Container**
+5. **Stop and Remove the Container**
 To stop and remove the container:
 
 ```bash
