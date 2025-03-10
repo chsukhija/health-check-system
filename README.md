@@ -83,7 +83,31 @@ docker tag health-check-system:latest <your-dockerhub-username>/health-check-sys
 docker push <your-dockerhub-username>/health-check-system:latest
 ```
 
-6. **Stop and Remove the Container**
+6. **Apply the Kubernetes Manifests:**
+Deploy the application to your Kubernetes cluster:
+
+```bash
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml  # If you created a service
+```
+
+7. **Verify the Deployment:**
+Check the status of the deployment and pods:
+
+```bash
+kubectl get deployments
+kubectl get pods
+```
+
+View Logs:
+To view the logs of the running pod:
+
+```bash
+kubectl logs <pod-name>
+```
+
+## Cleanup
+1. **Stop and Remove the Container**
 To stop and remove the container:
 
 ```bash
@@ -91,6 +115,10 @@ docker stop <container_id>
 docker rm <container_id>
 ```
 
+2. **Clean Up**
+If you want to delete the deployment and service:
 
-
-
+```bash
+kubectl delete -f deployment.yaml
+kubectl delete -f service.yaml  # If you created a service
+```
