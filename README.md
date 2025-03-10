@@ -1,7 +1,9 @@
 # Automated Health Check System
 
 This system monitors the health of a web application by performing periodic checks on a specified health endpoint. It logs results and sends alerts when issues are detected.
-Sample Slack Alert 
+
+
+## Sample Slack Alert 
 <img width="1189" alt="image" src="https://github.com/user-attachments/assets/ce8fe991-188b-46dc-9f87-6bc285b7878c" />
 
 
