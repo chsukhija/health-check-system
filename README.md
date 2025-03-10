@@ -7,7 +7,7 @@ This system monitors the health of a web application by performing periodic chec
 
 **Sample URL** "url": "https://ib1vjdrqg2qkgnjsi5g.c0.europe-west3.gcp.weaviate.cloud/v1/.well-known/live", "expected_status": 200
 
-<img width="1311" alt="image" src="https://github.com/user-attachments/assets/e66ceeda-b8a5-46dc-8c36-a5d5cc972bae" />
+<img width="1152" alt="image" src="https://github.com/user-attachments/assets/3a9fceb6-ef27-4f44-9cf6-a8d77adde3f7" />
 
 
 
