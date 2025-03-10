@@ -78,9 +78,9 @@ def check_endpoint(endpoint):
             if response.status_code == endpoint["expected_status"]:
                 response_text = response.text.strip()  # Get the plain text response
                 if response_text != endpoint.get("expected_response", "UP"):
-                    send_alert(f"{endpoint['name']}: Unexpected response: {response_text}")
+                    send_alert(f"{endpoint['url']}: Unexpected response: {response_text}")
                 else:
-                    send_alert_pass(f"{endpoint['name']}: Passed: {response_text}")
+                    send_alert_pass(f"{endpoint['url']}: Passed: {response_text}")
             
             break  # Exit retry loop if successful
 
