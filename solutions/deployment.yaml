@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-check-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: health-check-system
+  template:
+    metadata:
+      labels:
+        app: health-check-system
+    spec:
+      containers:
+      - name: health-check-container
+        image: <dockerhub>/health-check-system:latest
+        imagePullPolicy: Always
